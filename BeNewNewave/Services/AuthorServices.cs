@@ -46,7 +46,6 @@ namespace Backend.Sevices
             _repo.Delete(id);
             _repo.SaveChanges();
             return GenerateStrategyResponseDto("success");
-
         }
 
 

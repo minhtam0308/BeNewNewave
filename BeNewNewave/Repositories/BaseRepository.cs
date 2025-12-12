@@ -1,14 +1,15 @@
 ﻿using BeNewNewave.Data;
 using BeNewNewave.Interface.IRepo;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeNewNewave.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         protected readonly AppDbContext _context;
         protected readonly DbSet<T> _dbSet;
-        public BaseRepository(AppDbContext context) 
+        public BaseRepository(AppDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
@@ -35,15 +36,27 @@ namespace BeNewNewave.Repositories
             _dbSet.Update(entity);
         }
 
-        public virtual void Delete(object id)
+        public virtual void Delete(object idEntity, object idUser)
         {
-            var entity = _dbSet.Find(id);
+            var entity = _dbSet.Find(idEntity);
             if (entity != null)
-                _dbSet.Remove(entity);
+                entity.IsDeleted = true;
         }
         public virtual int SaveChanges()
         {
             return _context.SaveChanges();
         }
+    }
+
+
+    public interface IEntity
+    {
+        public Guid Id { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public string? UpdatedBy { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
