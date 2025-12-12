@@ -1,0 +1,83 @@
+﻿using BeNewNewave.Data;
+using BeNewNewave.Interface.Service;
+using BeNewNewave.Sevices;
+using BeNewNewave.Interface.IRepositories;
+using BeNewNewave.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Backend.Sevices;
+namespace BeNewNewave.Configs
+{
+    public static class AddConfig
+    {
+        public static IServiceCollection AddCorsConfig(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowWebHost",
+                poli => poli
+                    .WithOrigins("http://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(configuration["appsetting:token"]!)
+                        ),
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["appsetting:issuer"],
+                    ValidateAudience = false,
+                    ValidAudience = configuration["appsetting:audience"],
+
+                    ValidateLifetime = true
+
+                };
+            });
+            return services;
+        }
+
+
+        public static IServiceCollection DbConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(configuration["ConnectionStrings:mydb"]);
+            });
+            services.AddDbContext<ImageDBContext>(options => {
+                options.UseSqlServer(configuration["ConnectionStrings:myImageDB"]);
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddScopedConfig(this IServiceCollection services)
+        {
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserRepository, UserRepo>();
+            services.AddScoped<IAuthorServices, AuthorServices>();
+            services.AddScoped<IAuthorRepository, AuthorRepo>();
+
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<MapperProfile>();
+            });
+
+            return services;
+        }
+
+
+
+    }
+}

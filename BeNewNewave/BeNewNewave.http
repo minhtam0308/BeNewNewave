@@ -1,0 +1,6 @@
+@BeNewNewave_HostAddress = http://localhost:5017
+
+GET {{BeNewNewave_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
