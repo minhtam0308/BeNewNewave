@@ -34,9 +34,9 @@ namespace BeNewNewave.Services
             _repo.SaveChanges();
         }
 
-        public virtual void Delete(object id)
+        public virtual void Delete(object idEntity, string idUser)
         {
-            _repo.Delete(id);
+            _repo.Delete( idEntity, idUser);
             _repo.SaveChanges();
         }
     }

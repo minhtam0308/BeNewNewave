@@ -6,7 +6,7 @@
         IEnumerable<T> GetAll();
         void Insert(T entity);
         void Update(T entity);
-        void Delete(object id);
+        void Delete(object idEntity, string idUser);
         int SaveChanges();
     }
 }

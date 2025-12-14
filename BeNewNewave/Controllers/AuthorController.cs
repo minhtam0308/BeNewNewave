@@ -61,7 +61,8 @@ namespace Backend.Controllers
         [HttpDelete("deleteAuthor")]
         public async Task<ActionResult<ResponseDto>> DeleteAuthor(Guid idAuthor)
         {
-            return authorServices.DeleteAuthor(idAuthor);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+            return authorServices.DeleteAuthor(idAuthor, userId);
         }
 
         private ResponseDto GenerateStrategyResponseDto(string result)

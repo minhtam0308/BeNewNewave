@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BeNewNewave.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeNewNewave.Entities
 {
-    public abstract class BaseEntity
+    public abstract class BaseEntity : IBaseEntity
     {
         public Guid Id { get; set; }
 

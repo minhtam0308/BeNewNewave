@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BeNewNewave.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
     {
         protected readonly AppDbContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -36,20 +36,24 @@ namespace BeNewNewave.Repositories
             _dbSet.Update(entity);
         }
 
-        public virtual void Delete(object idEntity, object idUser)
+        public virtual void Delete(object idEntity, string idUser)
         {
             var entity = _dbSet.Find(idEntity);
             if (entity != null)
+            {
                 entity.IsDeleted = true;
+                entity.UpdatedBy = idUser;
+            }
         }
         public virtual int SaveChanges()
         {
             return _context.SaveChanges();
         }
+
     }
 
 
-    public interface IEntity
+    public interface IBaseEntity
     {
         public Guid Id { get; set; }
 

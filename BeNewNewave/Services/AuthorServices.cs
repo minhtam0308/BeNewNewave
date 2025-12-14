@@ -38,12 +38,12 @@ namespace Backend.Sevices
             return _responseDto.GetResponseDto();
         }
 
-        public ResponseDto DeleteAuthor(Guid id)
+        public ResponseDto DeleteAuthor(Guid idEntity, string idUser)
         {
-            var oldAuthor = _repo.GetById(id);
+            var oldAuthor = _repo.GetById(idEntity);
             if (oldAuthor == null)
                 return GenerateStrategyResponseDto("userError");
-            _repo.Delete(id);
+            _repo.Delete(idEntity, idUser);
             _repo.SaveChanges();
             return GenerateStrategyResponseDto("success");
         }
