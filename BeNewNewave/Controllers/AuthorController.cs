@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Backend.Controllers
+namespace BeNewNewave.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

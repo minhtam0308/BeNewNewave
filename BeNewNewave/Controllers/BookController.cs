@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Backend.Controllers
+namespace BeNewNewave.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

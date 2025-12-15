@@ -77,6 +77,11 @@ namespace BeNewNewave.Configs
             services.AddScoped<IImageServices, ImageServices>();
             services.AddScoped<IImageRepository, ImageRepo>();
 
+            services.AddScoped<ICartServices, CartServices>();
+            services.AddScoped<ICartRepository, CartRepo>();
+
+            services.AddScoped<ICartBookRepository, CartBookRepo>();
+
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<MapperProfile>();
