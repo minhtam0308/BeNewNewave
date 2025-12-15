@@ -1,11 +1,11 @@
 ﻿
 using BeNewNewave.DTOs;
 
-namespace BeNewNewave.Interface.Service
+namespace BeNewNewave.Interface.IServices
 {
     public interface IAuthService
     {
-        Task<ResponseDto> Register(UserDto request);
+        Task<ResponseDto> RegisterAsync(UserDto request);
         Task<ResponseDto> LoginAsyn(UserLoginDto request);
         Task<ResponseDto> RefreshTokenAsyn(RefreshTokenRequest request);
 

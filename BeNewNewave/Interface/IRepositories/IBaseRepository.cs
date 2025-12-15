@@ -4,8 +4,8 @@
     {
         T? GetById(object id);
         IEnumerable<T> GetAll();
-        void Insert(T entity);
-        void Update(T entity);
+        void Insert(T entity, string idUser);
+        void Update(T entity, string idUser);
         void Delete(object idEntity, string idUser);
         int SaveChanges();
     }

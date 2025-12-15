@@ -1,13 +1,14 @@
 ﻿using BeNewNewave.Data;
-using BeNewNewave.Interface.Service;
 using BeNewNewave.Sevices;
 using BeNewNewave.Interface.IRepositories;
+using BeNewNewave.Interface.IServices;
 using BeNewNewave.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Backend.Sevices;
+using BeNewNewave.Interface.Services;
 namespace BeNewNewave.Configs
 {
     public static class AddConfig
@@ -64,10 +65,17 @@ namespace BeNewNewave.Configs
         public static IServiceCollection AddScopedConfig(this IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
+
             services.AddScoped<IUserRepository, UserRepo>();
+
             services.AddScoped<IAuthorServices, AuthorServices>();
             services.AddScoped<IAuthorRepository, AuthorRepo>();
 
+            services.AddScoped<IBookRepository, BookRepo>();
+            services.AddScoped<IBookServices, BookServices>();
+
+            services.AddScoped<IImageServices, ImageServices>();
+            services.AddScoped<IImageRepository, ImageRepo>();
 
             services.AddAutoMapper(cfg =>
             {

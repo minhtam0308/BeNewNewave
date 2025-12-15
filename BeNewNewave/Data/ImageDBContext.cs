@@ -6,32 +6,37 @@ namespace BeNewNewave.Data
     public class ImageDBContext(DbContextOptions<ImageDBContext> options) : DbContext(options)
     {
         public DbSet<BookImage> BookImages { get; set; }
-        public override int SaveChanges()
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var entry in ChangeTracker.Entries()
-                     .Where(e => e.State == EntityState.Deleted))
-            {
-                entry.State = EntityState.Modified;
-                entry.CurrentValues["IsDeleted"] = true;
-            }
-
-            return base.SaveChanges();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<BookImage>().HasQueryFilter(x => !x.IsDeleted);
         }
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (var entry in ChangeTracker.Entries()
-                         .Where(e => e.State == EntityState.Deleted))
-            {
-                entry.State = EntityState.Modified;
-                entry.CurrentValues["IsDeleted"] = true;
-            }
-            foreach (var entry in ChangeTracker.Entries()
-                 .Where(e => e.State == EntityState.Modified))
-            {
-                entry.CurrentValues["UpdatedAt"] = DateTime.UtcNow;
-            }
+        //public override int SaveChanges()
+        //{
+        //    foreach (var entry in ChangeTracker.Entries()
+        //             .Where(e => e.State == EntityState.Deleted))
+        //    {
+        //        entry.State = EntityState.Modified;
+        //        entry.CurrentValues["IsDeleted"] = true;
+        //    }
 
-            return await base.SaveChangesAsync(cancellationToken);
-        }
+        //    return base.SaveChanges();
+        //}
+        //public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        //{
+        //    foreach (var entry in ChangeTracker.Entries()
+        //                 .Where(e => e.State == EntityState.Deleted))
+        //    {
+        //        entry.State = EntityState.Modified;
+        //        entry.CurrentValues["IsDeleted"] = true;
+        //    }
+        //    foreach (var entry in ChangeTracker.Entries()
+        //         .Where(e => e.State == EntityState.Modified))
+        //    {
+        //        entry.CurrentValues["UpdatedAt"] = DateTime.UtcNow;
+        //    }
+
+        //    return await base.SaveChangesAsync(cancellationToken);
+        //}
     }
 }

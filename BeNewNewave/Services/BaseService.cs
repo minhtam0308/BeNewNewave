@@ -5,7 +5,7 @@ namespace BeNewNewave.Services
 {
     public class BaseService<T> : IBaseService<T> where T : class
     {
-        protected readonly IBaseRepository<T> _repo;
+        private readonly IBaseRepository<T> _repo;
 
         public BaseService(IBaseRepository<T> repo)
         {
@@ -22,15 +22,15 @@ namespace BeNewNewave.Services
             return _repo.GetById(id);
         }
 
-        public virtual void Create(T entity)
+        public virtual void Create(T entity, string idUser)
         {
-            _repo.Insert(entity);
+            _repo.Insert(entity, idUser);
             _repo.SaveChanges();
         }
 
-        public virtual void Update(T entity)
+        public virtual void Update(T entity, string idUser)
         {
-            _repo.Update(entity);
+            _repo.Update(entity, idUser);
             _repo.SaveChanges();
         }
 

@@ -1,19 +1,19 @@
 ﻿using BeNewNewave.Data;
 using BeNewNewave.Interface.IRepo;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace BeNewNewave.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
+    public class BaseRepositoryImage<T> : IBaseRepository<T> where T : class, IBaseEntity
     {
-        protected readonly AppDbContext _context;
+        protected readonly ImageDBContext _context;
         protected readonly DbSet<T> _dbSet;
-        public BaseRepository(AppDbContext context)
+        public BaseRepositoryImage(ImageDBContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
         }
+
 
         public virtual IEnumerable<T> GetAll()
         {
@@ -27,7 +27,6 @@ namespace BeNewNewave.Repositories
 
         public virtual void Insert(T entity, string idUser)
         {
-            entity.CreatedAt = DateTime.Now;
             entity.CreatedBy = idUser;
             _dbSet.Add(entity);
         }
@@ -55,15 +54,4 @@ namespace BeNewNewave.Repositories
 
     }
 
-
-    public interface IBaseEntity
-    {
-        public Guid Id { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public string? UpdatedBy { get; set; }
-        public bool IsDeleted { get; set; }
-    }
 }

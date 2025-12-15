@@ -27,5 +27,21 @@ namespace BeNewNewave.DTOs
             return _responseDto.GetResponse();
         }
 
+        public ResponseDto GenerateStrategyResponseDto(string result)
+        {
+            switch (result)
+            {
+                case "userError":
+                    SetResponseDtoStrategy(new UserError());
+                    return GetResponseDto();
+                case "serverError":
+                    SetResponseDtoStrategy(new ServerError());
+                    return GetResponseDto();
+                default:
+                    SetResponseDtoStrategy(new Success());
+                    return GetResponseDto();
+            }
+        }
+
     }
 }

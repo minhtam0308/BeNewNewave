@@ -7,5 +7,6 @@ namespace BeNewNewave.Interface.IRepositories
     {
         bool IsEmailExist(string email);
         User? FindUserByEmail(string email);
+        void Insert(User entity);
     }
 }

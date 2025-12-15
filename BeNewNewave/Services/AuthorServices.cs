@@ -6,7 +6,7 @@ using BeNewNewave.Data;
 using BeNewNewave.DTOs;
 using BeNewNewave.Entities;
 using BeNewNewave.Interface.IRepositories;
-using BeNewNewave.Interface.Service;
+using BeNewNewave.Interface.IServices;
 using BeNewNewave.Services;
 using BeNewNewave.Strategy.ResponseDtoStrategy;
 using Microsoft.EntityFrameworkCore;
@@ -18,34 +18,37 @@ namespace Backend.Sevices
     {
         private readonly ResponseDto _responseDto = new ResponseDto();
         private readonly IMapper _mapper;
+        private readonly IAuthorRepository _authorRepository;
 
         public AuthorServices(IAuthorRepository authorRepo, IMapper mapper): base(authorRepo)
         {
             _mapper = mapper;
+            _authorRepository = authorRepo;
         }
 
-        public ResponseDto EditAuthor(AuthorRenameRequest author, Guid id)
+        public ResponseDto EditAuthor(AuthorRenameRequest author, string idUser)
         {
-            var authorEdit = _repo.GetById(author.Id);
+            //check author exist
+            var authorEdit = _authorRepository.GetById(author.Id);
             if (authorEdit == null)
             {
-                _responseDto.SetResponseDtoStrategy(new UserError());
-                return _responseDto.GetResponseDto();
+                return _responseDto.GenerateStrategyResponseDto("userError");
             }
-            _repo.Update(authorEdit);
-            _repo.SaveChanges();
-            _responseDto.SetResponseDtoStrategy(new Success());
-            return _responseDto.GetResponseDto();
+            //update author
+            authorEdit.NameAuthor = author.NameAuthor;
+            _authorRepository.Update(authorEdit, idUser);
+            _authorRepository.SaveChanges();
+            return _responseDto.GenerateStrategyResponseDto("success");
         }
 
         public ResponseDto DeleteAuthor(Guid idEntity, string idUser)
         {
-            var oldAuthor = _repo.GetById(idEntity);
+            var oldAuthor = _authorRepository.GetById(idEntity);
             if (oldAuthor == null)
-                return GenerateStrategyResponseDto("userError");
-            _repo.Delete(idEntity, idUser);
-            _repo.SaveChanges();
-            return GenerateStrategyResponseDto("success");
+                return _responseDto.GenerateStrategyResponseDto("userError");
+            _authorRepository.Delete(idEntity, idUser);
+            _authorRepository.SaveChanges();
+            return _responseDto.GenerateStrategyResponseDto("success");
         }
 
 
@@ -96,21 +99,6 @@ namespace Backend.Sevices
 
         //}
 
-        private ResponseDto GenerateStrategyResponseDto(string result)
-        {
-            switch (result)
-            {
-                case "userError":
-                    _responseDto.SetResponseDtoStrategy(new UserError());
-                    return _responseDto.GetResponseDto();
-                case "serverError":
-                    _responseDto.SetResponseDtoStrategy(new ServerError());
-                    return _responseDto.GetResponseDto();
-                default:
-                    _responseDto.SetResponseDtoStrategy(new Success());
-                    return _responseDto.GetResponseDto();
-            }
-        }
 
     }
 }

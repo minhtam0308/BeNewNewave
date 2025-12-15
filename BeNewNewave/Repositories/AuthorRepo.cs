@@ -8,5 +8,6 @@ namespace BeNewNewave.Repositories
     {
         public AuthorRepo(AppDbContext context) : base(context) { }
 
+
     }
 }

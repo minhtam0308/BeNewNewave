@@ -20,5 +20,10 @@ namespace BeNewNewave.Repositories
         {
             return _dbSet.Any(u => u.Email == email);
         }
+        public void Insert(User entity)
+        {
+            entity.CreatedAt = DateTime.Now;
+            _dbSet.Add(entity);
+        }
     }
 }

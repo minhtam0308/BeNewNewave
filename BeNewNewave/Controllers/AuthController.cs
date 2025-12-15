@@ -1,6 +1,6 @@
 ﻿
 using BeNewNewave.DTOs;
-using BeNewNewave.Interface.Service;
+using BeNewNewave.Interface.IServices;
 using BeNewNewave.DTOs;
 using BeNewNewave.Strategy.ResponseDtoStrategy;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +14,13 @@ namespace BeNewNewave.Controllers
     {
         private ResponseDto _response = new ResponseDto();
         [HttpPost("register")]
-        public async Task<ActionResult<object>> Register(UserDto request)
+        public async Task<ActionResult<object>> RegisterAsync(UserDto request)
         {
             if (request == null || request.Email == "" || request.Password == "" || request.Name == "" )
             {
-                SetResponseUserError();
-                return BadRequest(_response.GetResponseDto());
+                return _response.GenerateStrategyResponseDto("userError");
             }
-            var user = await authService.Register(request);
+            var user = await authService.RegisterAsync(request);
             return Ok(user);
         }
 
@@ -29,12 +28,11 @@ namespace BeNewNewave.Controllers
 
 
         [HttpPost("login")]
-        public async Task<ActionResult<ResponseDto>> Login(UserLoginDto request)
+        public async Task<ActionResult<ResponseDto>> LoginAsync(UserLoginDto request)
         {
             if (request == null || request.Email == "" || request.Password == "")
             {
-                SetResponseUserError();
-                return BadRequest(_response.GetResponseDto());
+                return BadRequest(_response.GenerateStrategyResponseDto("userError"));
             }
             ResponseDto result = await authService.LoginAsyn(request);
             if (result.errorCode != 0)
@@ -62,24 +60,21 @@ namespace BeNewNewave.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<ResponseDto>> RefreshToken()
+        public async Task<ActionResult<ResponseDto>> RefreshTokenAsync()
         {
             if (!Request.Cookies.TryGetValue("userId", out string? userId) || !Request.Cookies.TryGetValue("refreshToken", out string? refreshToken))
             {
-                SetResponseUserError();
-                return BadRequest(_response.GetResponseDto());
+                return BadRequest(_response.GenerateStrategyResponseDto("userError"));
             }
 
             if (!Guid.TryParse(userId, out var guidId))
             {
-                SetResponseUserError();
-                return BadRequest(_response.GetResponseDto());
+                return BadRequest(_response.GenerateStrategyResponseDto("userError"));
             }
             ResponseDto result = await authService.RefreshTokenAsyn(new RefreshTokenRequest() { UserId = guidId, RefreshToken = refreshToken });
             if (result.errorCode != 0)
             {
-                SetResponseUserError();
-                return BadRequest(_response.GetResponseDto());
+                return BadRequest(_response.GenerateStrategyResponseDto("userError"));
             }
             TokenResponseDto tokenInfor = (TokenResponseDto)result.data;
             Response.Cookies.Append("refreshToken", tokenInfor.RefreshToken, new CookieOptions
@@ -104,7 +99,7 @@ namespace BeNewNewave.Controllers
 
 
         [HttpGet("logout")]
-        public async Task<ActionResult<ResponseDto>> Logout()
+        public ActionResult<ResponseDto> Logout()
         {
 
             Response.Cookies.Append("refreshToken", "", new CookieOptions
@@ -125,11 +120,6 @@ namespace BeNewNewave.Controllers
             });
             _response.SetResponseDtoStrategy(new Success());
             return Ok(_response.GetResponseDto());
-        }
-
-        private void SetResponseUserError()
-        {
-            _response.SetResponseDtoStrategy(new UserError());
         }
 
     }
