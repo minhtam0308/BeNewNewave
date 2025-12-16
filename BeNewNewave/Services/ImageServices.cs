@@ -4,7 +4,6 @@ using BeNewNewave.Entities;
 using BeNewNewave.Interface.IRepositories;
 using BeNewNewave.Interface.Services;
 using BeNewNewave.Services;
-using Serilog;
 
 namespace Backend.Sevices
 {

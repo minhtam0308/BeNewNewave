@@ -25,6 +25,13 @@ namespace BeNewNewave.Repositories
             return lstResponse;
         }
 
+        public Book? GetBookByIdIncludeAuthor(Guid id)
+        {
+            var book = _dbSet.Include(b => b.Author).FirstOrDefault(b=> b.Id == id);
+           
+            return book;
+        }
+
         public async Task<List<BookResponse>?> GetBookPaginate(PaginationRequest paginationRequest)
         {
 

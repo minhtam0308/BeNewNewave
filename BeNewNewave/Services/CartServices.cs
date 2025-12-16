@@ -88,9 +88,10 @@ namespace Backend.Sevices
             {
                 foreach(var cartBook in cart.CartBooks)
                 {
-                    var booktemp = _bookRepository.GetById(cartBook.IdBook);
+                    var booktemp = _bookRepository.GetBookByIdIncludeAuthor(cartBook.IdBook);
                     if (booktemp != null) {
                         BookResponse resultBook = _mapper.Map<BookResponse>(booktemp);
+                        resultBook.Quantity = cartBook.Quantity;
                         result.ListBook.Add(resultBook);
                     }
                 }

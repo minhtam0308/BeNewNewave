@@ -14,7 +14,7 @@ using BeNewNewave.Interface.IServices;
 
 namespace BeNewNewave.Sevices
 {
-    public class AuthService(AppDbContext context, IConfiguration configuration, IUserRepository userRepo) : IAuthService
+    public class AuthService(AppDbContext context, IConfiguration configuration, IAuthRepository userRepo) : IAuthService
     {
         private ResponseDto _response = new ResponseDto();
 

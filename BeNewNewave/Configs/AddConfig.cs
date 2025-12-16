@@ -66,7 +66,7 @@ namespace BeNewNewave.Configs
         {
             services.AddScoped<IAuthService, AuthService>();
 
-            services.AddScoped<IUserRepository, UserRepo>();
+            services.AddScoped<IAuthRepository, AuthRepo>();
 
             services.AddScoped<IAuthorServices, AuthorServices>();
             services.AddScoped<IAuthorRepository, AuthorRepo>();
@@ -81,6 +81,9 @@ namespace BeNewNewave.Configs
             services.AddScoped<ICartRepository, CartRepo>();
 
             services.AddScoped<ICartBookRepository, CartBookRepo>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepo>();
 
             services.AddAutoMapper(cfg =>
             {
